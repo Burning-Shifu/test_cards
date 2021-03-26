@@ -1,0 +1,48 @@
+.filters {
+  max-width: 280px;
+  width: 100%;
+  height: fit-content;
+  margin-right: 20px;
+  background-color: #fff;
+  box-shadow: 0px 4px 8px rgba(178, 178, 178, 0.25);
+
+  &__title {
+    margin: 0;
+    padding: 15px 37px 10px;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 19px;
+    border-bottom: 1px solid #f8f8f8;
+  }
+
+  &__inner {
+    padding: 15px 30px 20px;
+  }
+
+  &__label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+  }
+
+  &__input {
+    display: block;
+    width: 100%;
+    margin-bottom: 17px;
+    padding: 8px 10px;
+    border: 1px solid #d9d9d9;
+    border-radius: 2px;
+
+    &[type="date"] {
+      display: inline-block;
+      max-width: 90px;
+      background-color: #fafafa;
+    }
+  }
+
+  &__text {
+    margin-right: 3px;
+  }
+}
