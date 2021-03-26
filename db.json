@@ -1,0 +1,30 @@
+{
+  "cards": [
+    {
+      "id": "A",
+      "order": 1,
+      "fixed": false
+    },
+    {
+      "id": "C",
+      "order": 3,
+      "fixed": false
+    },
+    {
+      "id": "B",
+      "order": 2,
+      "fixed": false
+    },
+    {
+      "id": "D",
+      "order": 4,
+      "fixed": false
+    },
+    {
+      "id": "E",
+      "order": 5,
+      "fixed": false
+    }
+  ]
+  
+}

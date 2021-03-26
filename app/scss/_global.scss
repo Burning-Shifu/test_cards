@@ -1,0 +1,33 @@
+html {
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+body {
+
+}
+
+a {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+// svg path {
+// 	fill:inherit;
+// 	stroke:inherit;
+// }
+
+.container {
+  max-width: 1230px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.d-flex {
+  display: flex;
+}
