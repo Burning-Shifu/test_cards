@@ -3,26 +3,36 @@
     {
       "id": "A",
       "order": 1,
-      "fixed": false
-    },
-    {
-      "id": "C",
-      "order": 3,
+      "type": "RUED",
+      "createDate": "12.03.2021",
       "fixed": false
     },
     {
       "id": "B",
       "order": 2,
+      "type": "RUEX",
+      "createDate": "07.12.2020",
+      "fixed": false
+    },
+    {
+      "id": "C",
+      "order": 3,
+      "type": "RUSG",
+      "createDate": "02.10.2020",
       "fixed": false
     },
     {
       "id": "D",
       "order": 4,
+      "type": "RUEX",
+      "createDate": "13.01.2021",
       "fixed": false
     },
     {
       "id": "E",
       "order": 5,
+      "type": "RUED",
+      "createDate": "05.02.2021",
       "fixed": false
     }
   ]
