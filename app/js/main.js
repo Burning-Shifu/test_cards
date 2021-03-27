@@ -1,3 +1,5 @@
+'use strict'
+
 document.addEventListener('DOMContentLoaded', () => {
 
   // const postData = async (url, data) => {  
@@ -49,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
         element.innerHTML = `
           <div class="cards__header d-flex">
-            <h3 class="cards__title">Card <span class="cards__num">${this.order}</span></h3>
+            <h3 class="cards__title">Card <span class="cards__order">${this.order}</span></h3>
             <button class="cards__extra" type="button">
               <span class="cards__extra-dot"></span>
             </button>
@@ -57,8 +59,8 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="cards__content">
             <p class="cards__id">${this.id}</p>
             <p class="cards__create-date">${this.createDate}</p>
-            <p class="cards__create-date">${this.time}</p>
-            <p class="cards__create-date">${this.type}</p>
+            <p class="cards__time">${this.time}</p>
+            <p class="cards__type">${this.type}</p>
             </div>
         `;
 
@@ -125,27 +127,94 @@ document.addEventListener('DOMContentLoaded', () => {
   // end модальные окна
 
 
-  const cardsList = document.querySelectorAll(".cards__item");
+  // блок фильтрации
 
-  const cardsId = document.querySelectorAll(".cards__id"),
-        inputId = document.querySelector("#filter-id");
+  /** Промис - ожидание прогрузки элемента (для динамичных карточек)
+   * Wait for an element before resolving a promise
+   * @param {String} querySelector - Selector of element to wait for
+   * @param {Integer} timeout - Milliseconds to wait before timing out, or 0 for no timeout              
+  */
 
-  function filterById(param) {
-    
-    cardsId.forEach((item) => {
-      console.log('ok');
-      if (item.textContent !== param && param !== "") {
-        item.parentElement.parentElement.style.display = "none";
-      } else {
-        item.parentElement.parentElement.style.display = "";
-      }
+  function waitForElement(querySelector, timeout = 0) {
+    const startTime = new Date().getTime();
+    return new Promise((resolve, reject) => {
+        const timer = setInterval(() => {
+          const now = new Date().getTime();
+          if (document.querySelector(querySelector)) {
+              clearInterval(timer);
+              resolve();
+          } else if (timeout && now - startTime >= timeout) {
+              clearInterval(timer);
+              reject();
+          }
+        }, 100);
     });
-    console.log(param);
   }
 
-  inputId.addEventListener('input', () => filterById(inputId.value));
 
+  // по ID (рабочий)
   
+  // waitForElement(".cards__id", 5000).then(function() {
+  //   const cardsId = document.querySelectorAll(".cards__id"),
+  //         inputId = document.querySelector("#filter-id");
+
+  //   function filterById(param) {
+
+  //     cardsId.forEach((item) => {
+  //       if (item.textContent !== param && param !== "") {
+  //         item.parentElement.parentElement.style.display = "none";
+  //       } else {
+  //         item.parentElement.parentElement.style.display = "";
+  //       }
+  //     });
+  //   }
+
+  //   inputId.addEventListener('input', () => filterById(inputId.value));
+  // });
+
+  // end по ID (рабочий)
+
+
+  waitForElement(".cards__item", 3000).then(function() {
+    const cardsList = document.querySelectorAll('.cards__item'),
+          inputId = document.querySelector("#filter-id"),
+          inputOrder = document.querySelector("#filter-num");
+
+    // по id
+    function filterById(param) {
+      cardsList.forEach((card) => {
+        let id = card.querySelector(".cards__id");
+
+        if (id.textContent !== param && param !== "") {
+          card.style.display = "none";
+        } else {
+          card.style.display = "";
+        }
+      });
+    }
+
+    // по номеру order
+
+    function filterByOrder(param) {
+
+      cardsList.forEach((card) => {
+        let order = card.querySelector(".cards__order");
+
+        if (order.textContent !== param && param !== "") {
+          card.style.display = "none";
+        } else {
+          card.style.display = "";
+        }
+      });
+    }
+
+    
+    inputId.addEventListener('input', () => filterById(inputId.value));
+    inputOrder.addEventListener('input', () => filterByOrder(inputOrder.value));
+  });
+
+
+
 
   
 
