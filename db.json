@@ -5,6 +5,7 @@
       "order": 1,
       "type": "RUED",
       "createDate": "12.03.2021",
+      "time": "15.00",
       "fixed": false
     },
     {
@@ -12,6 +13,7 @@
       "order": 2,
       "type": "RUEX",
       "createDate": "07.12.2020",
+      "time": "12.25",
       "fixed": false
     },
     {
@@ -19,6 +21,7 @@
       "order": 3,
       "type": "RUSG",
       "createDate": "02.10.2020",
+      "time": "18.00",
       "fixed": false
     },
     {
@@ -26,6 +29,7 @@
       "order": 4,
       "type": "RUEX",
       "createDate": "13.01.2021",
+      "time": "11.45",
       "fixed": false
     },
     {
@@ -33,6 +37,7 @@
       "order": 5,
       "type": "RUED",
       "createDate": "05.02.2021",
+      "time": "16.30",
       "fixed": false
     }
   ]

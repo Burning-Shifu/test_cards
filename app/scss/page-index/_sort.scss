@@ -24,6 +24,7 @@
     height: 16px;
     opacity: 0;
     z-index: 1;
+    cursor: pointer;
 
     &:checked + .sort__check::after {
       display: block;
@@ -36,6 +37,7 @@
     margin-right: 8px;
     width: 10px;
     height: 10px;
+    background-color: transparent;
     border: 1px solid #2B2839;
     border-radius: 3px;
 
@@ -48,6 +50,7 @@
       width: 8px;
       height: 8px;
       background-image: url(../../img/check.svg);
+      background-image: url(../img/check.svg);
       background-repeat: no-repeat;
     }
   }

@@ -11,7 +11,9 @@
 <body>
 
   <header class="header">
-    <h1 class="header__title">Тестовое задание</h1>
+    <div class="container">
+      <h1 class="header__title">Тестовое задание</h1>
+    </div>
   </header>
 
   <main class="main">
@@ -24,7 +26,7 @@
 
           <div class="filters__inner">
             <label for="filter-id" class="filters__label">ID</label>
-            <input type="number" class="filters__input" placeholder="Введите значение" id="filter-id" name="id">
+            <input type="text" class="filters__input" placeholder="Введите значение" id="filter-id" name="id">
   
             <label for="filter-num" class="filters__label">Номер накладной</label>
             <input type="number" class="filters__input" placeholder="Введите значение" id="filter-num" name="num">
@@ -85,7 +87,19 @@
 
   <footer class="footer"></footer>
 
-
+  <div class="modal">
+    <div class="modal__inner d-flex">
+      <div class="modal__content">
+        <div class="modal__close">×</div>
+        <div class="modal__title">Забронировать номер</div>
+        <form class="modal__form" id="book-form" method="post">
+          
+    
+          <button class="modal__btn" type="submit">Добавить</button>
+        </form>
+      </div>
+    </div>
+  </div>
 
 
   <script src="js/libs.min.js"></script>
