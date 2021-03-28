@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
         element.innerHTML = `
           <div class="cards__header d-flex">
-            <h3 class="cards__title">Card <span class="cards__order">${this.order}</span></h3>
+            <h3 class="cards__title">Карточка <span class="cards__order">${this.order}</span></h3>
             <button class="cards__extra" type="button">
               <span class="cards__extra-dot"></span>
             </button>
@@ -138,47 +138,26 @@ document.addEventListener('DOMContentLoaded', () => {
   function waitForElement(querySelector, timeout = 0) {
     const startTime = new Date().getTime();
     return new Promise((resolve, reject) => {
-        const timer = setInterval(() => {
-          const now = new Date().getTime();
-          if (document.querySelector(querySelector)) {
-              clearInterval(timer);
-              resolve();
-          } else if (timeout && now - startTime >= timeout) {
-              clearInterval(timer);
-              reject();
-          }
-        }, 100);
+      const timer = setInterval(() => {
+        const now = new Date().getTime();
+        if (document.querySelector(querySelector)) {
+          clearInterval(timer);
+          resolve();
+        } else if (timeout && now - startTime >= timeout) {
+          clearInterval(timer);
+          reject();
+        }
+      }, 100);
     });
   }
-
-
-  // по ID (рабочий)
-  
-  // waitForElement(".cards__id", 5000).then(function() {
-  //   const cardsId = document.querySelectorAll(".cards__id"),
-  //         inputId = document.querySelector("#filter-id");
-
-  //   function filterById(param) {
-
-  //     cardsId.forEach((item) => {
-  //       if (item.textContent !== param && param !== "") {
-  //         item.parentElement.parentElement.style.display = "none";
-  //       } else {
-  //         item.parentElement.parentElement.style.display = "";
-  //       }
-  //     });
-  //   }
-
-  //   inputId.addEventListener('input', () => filterById(inputId.value));
-  // });
-
-  // end по ID (рабочий)
-
 
   waitForElement(".cards__item", 3000).then(function() {
     const cardsList = document.querySelectorAll('.cards__item'),
           inputId = document.querySelector("#filter-id"),
-          inputOrder = document.querySelector("#filter-num");
+          inputOrder = document.querySelector("#filter-num"),
+          inputFromDate = document.querySelector('#filter-from-date'),
+          inputByDate = document.querySelector('#filter-by-date'),
+          inputType = document.querySelector('#filter-type');
 
     // по id
     function filterById(param) {
@@ -196,7 +175,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // по номеру order
 
     function filterByOrder(param) {
-
       cardsList.forEach((card) => {
         let order = card.querySelector(".cards__order");
 
@@ -208,12 +186,75 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    
+    // по времени "с" и "по"
+
+    function filterByTime(params) {
+
+      cardsList.forEach((card) => {
+        let time = card.querySelector(".cards__time");
+
+        if (params.paramFrom !== "" || params.paramBy !== "") {       // если С или ПО не пустые                          
+
+          if (params.paramFrom === "") {                              // если С пустое   
+
+            if (time.textContent < params.paramBy) {
+              card.style.display = "";
+            } else {
+              card.style.display = "none";
+            }
+
+          } else if (params.paramBy === "") {                         // если ПО пустое  
+
+            if (time.textContent > params.paramFrom) {
+              card.style.display = "";
+            } else {
+              card.style.display = "none";
+            }
+
+          } else if (time.textContent >= params.paramFrom && time.textContent <= params.paramBy) {
+            card.style.display = "";
+          } else {
+            card.style.display = "none";
+          }
+        
+        } else {
+          card.style.display = "";
+        }
+
+      });
+    }
+
+    //  по типу type
+
+    function filterByType(param) {
+      cardsList.forEach((card) => {
+        let type = card.querySelector(".cards__type");
+
+        if (type.textContent === param) {
+          card.style.display = ""; 
+        } else if (param === "all") {
+          card.style.display = "";
+        } else {
+          card.style.display = "none";
+        }
+
+      });
+    }
+
+
+    // обработчики событий фильтрации
+
     inputId.addEventListener('input', () => filterById(inputId.value));
     inputOrder.addEventListener('input', () => filterByOrder(inputOrder.value));
+    inputType.addEventListener('change', () => filterByType(inputType.value));
+
+    inputFromDate.addEventListener('input', () => {
+      filterByTime({"paramFrom": inputFromDate.value, "paramBy": inputByDate.value});
+    });
+    inputByDate.addEventListener('input', () => {
+      filterByTime({"paramFrom": inputFromDate.value, "paramBy": inputByDate.value});
+    });
   });
-
-
 
 
   
