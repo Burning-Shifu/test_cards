@@ -15,117 +15,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // };
 
   
-  async function getResource(url) {  
-    let res = await fetch(url);
   
-    if (!res.ok) {
-      throw new Error(`Couldn't fetch ${url}, status ${res.status}`);
-    }
+
+  cards('start');
+
   
-    return await res.json();
-  }
-  
-  // вывод карточек из бд
-
-  function cards() {
-    class OrderCard {
-      constructor(id, createDate, order, type, time, ...classes) {
-        this.id = id;
-        this.createDate = createDate;
-        this.order = order;
-        this.type = type;
-        this.time = time;
-        this.classes = classes;  // важно помнить, что это массив, даже если он пустой
-        this.parent = document.querySelector(".cards");
-      }
-    
-      render() {
-        const element = document.createElement('article');
-    
-        // устанавливаем дефолтное значение класса
-        if (this.classes.length === 0) {
-          element.classList.add('cards__item');
-        } else {
-          this.classes.forEach(className => element.classList.add(className)); // добавляем диву все классы из массива
-        }
-    
-        element.innerHTML = `
-          <div class="cards__header d-flex">
-            <h3 class="cards__title">Карточка <span class="cards__order">${this.order}</span></h3>
-            <button class="cards__extra" type="button">
-              <span class="cards__extra-dot"></span>
-            </button>
-          </div>
-          <div class="cards__content">
-            <p class="cards__id">${this.id}</p>
-            <p class="cards__create-date">${this.createDate}</p>
-            <p class="cards__time">${this.time}</p>
-            <p class="cards__type">${this.type}</p>
-            </div>
-        `;
-
-        this.parent.append(element);
-      }
-    }
-
-    getResource('http://localhost:3000/cards')
-        .then(data => {
-          data.forEach(({id, createDate, order, type, time}) => {    // деструктуризируем объект
-            new OrderCard(id, createDate, order, type, time).render();
-          });
-        });
-  }
-
-  cards();
-
   // end вывод карточек из бд
-
-  // модальные окна
-  const btnModal = document.querySelector('.sort__add'),
-    btnClose = document.querySelector('.modal__close'),
-    addModal = document.querySelector('.modal'),
-    body = document.querySelector('body'),
-    form = document.querySelector('.book-modal__form');
-
-  let scrollWidth = window.innerWidth - document.documentElement.clientWidth;
-      
-
-  function openModal(modal) {
-    modal.classList.remove('hide');
-    modal.classList.add('show');
-    body.style.overflow = 'hidden';
-    body.style.paddingRight = scrollWidth + 'px';
-  }
-
-  btnModal.addEventListener('click', () => openModal(addModal));
-
-  function closeModal(modal) {
-    modal.classList.remove('show');
-    modal.classList.add('hide');
-    body.style.overflow = 'auto';
-    body.style.paddingRight = 0 + 'px';
-  }
-
-  btnClose.addEventListener('click', () => closeModal(addModal));
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && addModal.classList.contains('show')) {
-      closeModal(addModal);
-    }
-  });
-
-  // submit
-
-  // form.addEventListener('submit', (e) => {
-  //   e.preventDefault();
-
-  //   form.reset();
-  //   closeModal(modalBook);
-  //   openModal(modalThx);
-  // });
-
-  // end модальные окна
-
 
   // блок фильтрации
 
@@ -256,7 +151,178 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // end блок фильтрации
 
-  
+  // модальные окна
+  const btnModal = document.querySelector('.sort__add'),
+    btnClose = document.querySelector('.modal__close'),
+    addModal = document.querySelector('.modal'),
+    body = document.querySelector('body'),
+    form = document.querySelector('.book-modal__form');
+
+  let scrollWidth = window.innerWidth - document.documentElement.clientWidth;
+      
+
+  function openModal(modal) {
+    modal.classList.remove('hide');
+    modal.classList.add('show');
+    body.style.overflow = 'hidden';
+    body.style.paddingRight = scrollWidth + 'px';
+  }
+
+  btnModal.addEventListener('click', () => openModal(addModal));
+
+  function closeModal(modal) {
+    modal.classList.remove('show');
+    modal.classList.add('hide');
+    body.style.overflow = 'auto';
+    body.style.paddingRight = 0 + 'px';
+  }
+
+  btnClose.addEventListener('click', () => closeModal(addModal));
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && addModal.classList.contains('show')) {
+      closeModal(addModal);
+    }
+  });
+
+  // submit
+
+  // form.addEventListener('submit', (e) => {
+  //   e.preventDefault();
+
+  //   form.reset();
+  //   closeModal(modalBook);
+  //   openModal(modalThx);
+  // });
+
+  // end модальные окна
 
 });
+
+
+// блок get карточек и сортировки
+
+async function getResource(url) {  
+  let res = await fetch(url);
+
+  if (!res.ok) {
+    throw new Error(`Couldn't fetch ${url}, status ${res.status}`);
+  }
+
+  return await res.json();
+}
+  
+// вывод карточек из бд
+
+function cards(val) {
+  class OrderCard {
+    constructor(id, createDate, order, type, time, ...classes) {
+      this.id = id;
+      this.createDate = createDate;
+      this.order = order;
+      this.type = type;
+      this.time = time;
+      this.classes = classes;  // важно помнить, что это массив, даже если он пустой
+      this.parent = document.querySelector(".cards");
+    }
+  
+    render() {
+      const element = document.createElement('article');
+  
+      // устанавливаем дефолтное значение класса
+      if (this.classes.length === 0) {
+        element.classList.add('cards__item');
+      } else {
+        this.classes.forEach(className => element.classList.add(className)); // добавляем диву все классы из массива
+      }
+  
+      element.innerHTML = `
+        <div class="cards__header d-flex">
+          <h3 class="cards__title">Карточка <span class="cards__order">${this.order}</span></h3>
+          <button class="cards__extra" type="button">
+            <span class="cards__extra-dot"></span>
+          </button>
+        </div>
+        <div class="cards__content">
+          <p class="cards__id">${this.id}</p>
+          <p class="cards__create-date">${this.createDate}</p>
+          <p class="cards__time">${this.time}</p>
+          <p class="cards__type">${this.type}</p>
+          </div>
+      `;
+
+      this.parent.append(element);
+    }
+  }
+
+  getResource('http://localhost:3000/cards').then(data => {
+    switch (val) {
+        case 'id-up':
+            data = data.sort(compare_id_up);
+            break;
+        case 'id-down':
+            data = (data.sort(compare_id_up)).reverse();
+            break;
+        case 'date-up':
+            data = data.sort(compare_date_up);
+            break;
+        case 'date-down':
+            data = (data.sort(compare_date_up)).reverse();
+            break;
+        case 'type-up':
+            data = data.sort(compare_type_up);
+            break;
+        case 'type-down':
+            data = (data.sort(compare_type_up)).reverse();
+            break;
+        default:
+            data = data;
+            break;
+    }
+
+    data.forEach(({id, createDate, order, type, time}) => {
+        new OrderCard(id, createDate, order, type, time).render();
+    });
+  })
+}
+
+function compare_id_up( a, b ) {
+  if ( a.id < b.id ){
+    return -1;
+  }
+  if ( a.id > b.id ){
+    return 1;
+  }
+  return 0;
+}
+
+function compare_date_up( a, b ) {
+  if ( Date.parse(a.createDate) < Date.parse(b.createDate) ){
+    return -1;
+  }
+  if ( Date.parse(a.createDate) > Date.parse(b.createDate) ){
+    return 1;
+  }
+  return 0;
+}
+
+function compare_type_up( a, b ) {
+  if ( a.type < b.type ){
+    return -1;
+  }
+  if ( a.type > b.type ){
+    return 1;
+  }
+  return 0;
+}
+
+// обработчик события сортировки (селект)
+
+document.querySelector('#sort').addEventListener('change', (elem) => {
+  document.getElementsByClassName('cards d-flex')[0].innerHTML = ''; 
+  cards(elem.target.value);
+});
+
+//
