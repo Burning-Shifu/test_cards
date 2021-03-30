@@ -26,11 +26,6 @@ a {
   cursor: pointer;
 }
 
-// svg path {
-// 	fill:inherit;
-// 	stroke:inherit;
-// }
-
 .container {
   max-width: 1240px;
   margin: 0 auto;
@@ -47,4 +42,25 @@ a {
 
 .hide {
   display: none !important;
+}
+
+.btn {
+  background-color: #fff;
+  border: 1px solid #e0e5e6;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.msg {
+  position: absolute;
+  top: 35%;
+  bottom: 35%;
+  right: 5%;
+  left: 5%;
+  padding: 60px 10px;
+  font-size: 22px;
+  font-weight: bold;
+  text-align: center;
+  background-color: #fff;
+  border: 2px solid var(--text-color);
 }

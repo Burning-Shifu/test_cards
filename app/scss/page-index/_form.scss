@@ -1,0 +1,51 @@
+.form {
+  position: relative;
+
+  &__title {
+    margin: 0;
+    padding: 45px 40px 15px;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 20px;
+    border-bottom: 1px solid #dddada;
+    text-align: center;
+  }
+
+  &__inner {
+    padding: 20px 60px 50px;
+  }
+
+  &__label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+  }
+
+  &__input {
+    display: block;
+    width: 100%;
+    margin-bottom: 17px;
+    padding: 8px 10px;
+    border: 1px solid #d9d9d9;
+    border-radius: 2px;
+
+    &[type="time"] {
+      display: inline-block;
+      max-width: 90px;
+      background-color: #fafafa;
+    }
+  }
+
+  &__text {
+    margin-right: 3px;
+  }
+
+  &__btn {
+    display: block;
+    margin: 30px auto 0;
+    padding: 10px 20px;
+    border: 1px solid var(--text-color);
+  }
+}

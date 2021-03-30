@@ -6,6 +6,7 @@
     <title>Карточки заказов</title>
     <link rel="stylesheet" href="css/libs.min.css">
     <link rel="stylesheet" href="css/style.min.css">
+    <link rel="icon" type="image/x-icon" sizes="any" href="img/favicon.ico"> 
 </head>
 
 <body>
@@ -20,33 +21,32 @@
     <div class="container">
       <div class="main__inner d-flex">
 
-        <div class="filters">
+        <div class="filters form">
 
-          <h2 class="filters__title">Фильтры</h2>
+          <h2 class="form__title filters__title">Фильтры</h2>
 
-          <div class="filters__inner">
-            <label for="filter-id" class="filters__label">ID</label>
-            <input type="text" class="filters__input" placeholder="Введите значение" id="filter-id" name="id">
+          <div class="form__inner filters__inner">
+            <label for="filter-id" class="form__label">ID</label>
+            <input type="text" class="form__input" placeholder="Введите значение" id="filter-id" name="id">
   
-            <label for="filter-num" class="filters__label">Номер накладной</label>
-            <input type="number" class="filters__input" placeholder="Введите значение" id="filter-num" name="num">
+            <label for="filter-num" class="form__label">Номер накладной</label>
+            <input type="number" class="form__input" placeholder="Введите значение" id="filter-num" name="num">
   
-            <label for="filter-from-date" class="filters__label">Время прибытия на выгрузку</label>
-            <span class="filters__text">с</span>
-            <input type="time" class="filters__input" id="filter-from-date" name="from-date">
+            <label for="filter-from-date" class="form__label">Время прибытия на выгрузку</label>
+            <span class="form__text">с</span>
+            <input type="time" class="form__input" id="filter-from-date" name="from-date">
   
-            <span class="filters__text">по</span>
-            <input type="time" class="filters__input" id="filter-by-date" name="to-date">
+            <span class="form__text">по</span>
+            <input type="time" class="form__input" id="filter-by-date" name="to-date">
   
-            <span for="filter-type" class="filters__label">Тип заказа</span>
-            <select class="filters__input" id="filter-type" name="type">
+            <span class="form__label">Тип заказа</span>
+            <select class="form__input" id="filter-type" name="type">
               <option value="all">Все типы</option>
               <option value="RUED">RUED</option>
               <option value="RUEX">RUEX</option>
               <option value="RUSG">RUSG</option>
             </select>
           </div>
-
 
         </div>
 
@@ -55,7 +55,7 @@
           <div class="sort d-flex">
 
             <select class="sort__select" id="sort" name="sort">
-              <option value="" disabled selected>Сортировка</option>
+              <option value="default" disabled selected>Сортировка</option>
               <option value="id-up">По возрастанию ID</option>
               <option value="id-down">По убыванию ID</option>
               <option value="date-up">По дате создания: возрастание</option>
@@ -70,7 +70,7 @@
               <label for="drag" class="sort__label">Включить перетаскивание</label>
             </div>
 
-            <button class="sort__add" type="button">Добавить</button>
+            <button class="btn sort__add" type="button">Добавить</button>
 
           </div>
 
@@ -92,11 +92,32 @@
     <div class="modal__inner d-flex">
       <div class="modal__content">
         <div class="modal__close">×</div>
-        <div class="modal__title">Забронировать номер</div>
-        <form class="modal__form" id="book-form" method="post">
+        <form class="form" id="add-form" method="post">
           
+          <h2 class="form__title">Добавить новую карточку</h2>
+
+          <div class="form__inner">
+            <label for="addCard-id" class="form__label">ID</label>
+            <input type="text" class="form__input" placeholder="Введите значение" id="addCard-id" name="id">
+  
+            <label for="addCard-order" class="form__label">Номер накладной</label>
+            <input type="number" class="form__input" placeholder="Введите значение" id="addCard-order" name="order" required>
+  
+            <label for="addCard-from-date" class="form__label">Время прибытия на выгрузку</label>
+            <input type="time" class="form__input" id="addCard-time" name="time" required>
     
-          <button class="modal__btn" type="submit">Добавить</button>
+            <span class="form__label">Тип заказа</span>
+            <select class="form__input" id="addCard-type" name="type" required>
+              <option value="" disabled selected>Выберите</option>
+              <option value="RUED">RUED</option>
+              <option value="RUEX">RUEX</option>
+              <option value="RUSG">RUSG</option>
+            </select>
+
+            <button class="btn form__btn" type="submit">Добавить</button>
+
+          </div>
+
         </form>
       </div>
     </div>

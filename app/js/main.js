@@ -2,25 +2,40 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  // const postData = async (url, data) => {  
-  //   let res = await fetch(url, {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-type': 'application/json'
-  //     },
-  //     body: data
-  //   });
-  
-  //   return await res.json(); 
-  // };
+  const sortSelect = document.querySelector('#sort');
 
-  
-  
+  // проверка в LS на сортировку
 
-  cards('start');
-
-  
-  // end вывод карточек из бд
+  switch (localStorage.getItem('sorting')) {
+    case 'id-up':
+        sortSelect.value = 'id-up';
+        cards('id-up');
+        break;
+    case 'id-down':
+        sortSelect.value = 'id-down';
+        cards('id-down');
+        break;
+    case 'date-up':
+        sortSelect.value = 'date-up';
+        cards('date-up');
+        break;
+    case 'date-down':
+        sortSelect.value = 'date-down';
+        cards('date-down');
+        break;
+    case 'type-up':
+        sortSelect.value = 'type-up';
+        cards('type-up');
+        break;
+    case 'type-down':
+        sortSelect.value = 'type-down';
+        cards('type-down');
+        break;
+    default:
+        sortSelect.value = 'default';
+        cards('start');
+        break;
+  }
 
   // блок фильтрации
 
@@ -153,16 +168,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // end блок фильтрации
 
-  // модальные окна
+  // модальное окно
   const btnModal = document.querySelector('.sort__add'),
     btnClose = document.querySelector('.modal__close'),
     addModal = document.querySelector('.modal'),
     body = document.querySelector('body'),
-    form = document.querySelector('.book-modal__form');
-
+    form = document.querySelector('.form');
   let scrollWidth = window.innerWidth - document.documentElement.clientWidth;
       
-
   function openModal(modal) {
     modal.classList.remove('hide');
     modal.classList.add('show');
@@ -189,140 +202,203 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // submit
 
-  // form.addEventListener('submit', (e) => {
-  //   e.preventDefault();
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
 
-  //   form.reset();
-  //   closeModal(modalBook);
-  //   openModal(modalThx);
-  // });
+    form.reset();
+  });
 
   // end модальные окна
 
-});
 
 
-// блок get карточек и сортировки
 
-async function getResource(url) {  
-  let res = await fetch(url);
+  // блок get карточек и сортировки
 
-  if (!res.ok) {
-    throw new Error(`Couldn't fetch ${url}, status ${res.status}`);
+  async function getResource(url) {  
+    let res = await fetch(url);
+
+    if (!res.ok) {
+      throw new Error(`Couldn't fetch ${url}, status ${res.status}`);
+    }
+
+    return await res.json();
   }
 
-  return await res.json();
-}
-  
-// вывод карточек из бд
+  // вывод карточек из бд
 
-function cards(val) {
-  class OrderCard {
-    constructor(id, createDate, order, type, time, ...classes) {
-      this.id = id;
-      this.createDate = createDate;
-      this.order = order;
-      this.type = type;
-      this.time = time;
-      this.classes = classes;  // важно помнить, что это массив, даже если он пустой
-      this.parent = document.querySelector(".cards");
-    }
-  
-    render() {
-      const element = document.createElement('article');
-  
-      // устанавливаем дефолтное значение класса
-      if (this.classes.length === 0) {
-        element.classList.add('cards__item');
-      } else {
-        this.classes.forEach(className => element.classList.add(className)); // добавляем диву все классы из массива
+  function cards(val) {
+    class OrderCard {
+      constructor(id, createDate, order, type, time, ...classes) {
+        this.id = id;
+        this.createDate = createDate;
+        this.order = order;
+        this.type = type;
+        this.time = time;
+        this.classes = classes;  // важно помнить, что это массив, даже если он пустой
+        this.parent = document.querySelector(".cards");
       }
-  
-      element.innerHTML = `
-        <div class="cards__header d-flex">
-          <h3 class="cards__title">Карточка <span class="cards__order">${this.order}</span></h3>
-          <button class="cards__extra" type="button">
-            <span class="cards__extra-dot"></span>
-          </button>
-        </div>
-        <div class="cards__content">
-          <p class="cards__id">${this.id}</p>
-          <p class="cards__create-date">${this.createDate}</p>
-          <p class="cards__time">${this.time}</p>
-          <p class="cards__type">${this.type}</p>
+    
+      render() {
+        const element = document.createElement('article');
+    
+        // устанавливаем дефолтное значение класса
+        if (this.classes.length === 0) {
+          element.classList.add('cards__item');
+        } else {
+          this.classes.forEach(className => element.classList.add(className)); // добавляем диву все классы из массива
+        }
+    
+        element.innerHTML = `
+          <div class="cards__header d-flex">
+            <h3 class="cards__title">Карточка <span class="cards__order">${this.order}</span></h3>
+            <button class="cards__extra" type="button">
+              <span class="cards__extra-dot"></span>
+            </button>
           </div>
-      `;
+          <div class="cards__content">
+            <p class="cards__id">${this.id}</p>
+            <p class="cards__create-date">${this.createDate}</p>
+            <p class="cards__time">${this.time}</p>
+            <p class="cards__type">${this.type}</p>
+            </div>
+        `;
 
-      this.parent.append(element);
-    }
-  }
-
-  getResource('http://localhost:3000/cards').then(data => {
-    switch (val) {
-        case 'id-up':
-            data = data.sort(compare_id_up);
-            break;
-        case 'id-down':
-            data = (data.sort(compare_id_up)).reverse();
-            break;
-        case 'date-up':
-            data = data.sort(compare_date_up);
-            break;
-        case 'date-down':
-            data = (data.sort(compare_date_up)).reverse();
-            break;
-        case 'type-up':
-            data = data.sort(compare_type_up);
-            break;
-        case 'type-down':
-            data = (data.sort(compare_type_up)).reverse();
-            break;
-        default:
-            data = data;
-            break;
+        this.parent.append(element);
+      }
     }
 
-    data.forEach(({id, createDate, order, type, time}) => {
+    getResource('http://localhost:3000/cards').then(data => {
+      switch (val) {
+          case 'id-up':
+              data = data.sort(compare_id_up);
+              localStorage.setItem('sorting', 'id-up');
+              break;
+          case 'id-down':
+              data = (data.sort(compare_id_up)).reverse();
+              localStorage.setItem('sorting', 'id-down');
+              break;
+          case 'date-up':
+              data = data.sort(compare_date_up);
+              localStorage.setItem('sorting', 'date-up');
+              break;
+          case 'date-down':
+              data = (data.sort(compare_date_up)).reverse();
+              localStorage.setItem('sorting', 'date-down');
+              break;
+          case 'type-up':
+              data = data.sort(compare_type_up);
+              localStorage.setItem('sorting', 'type-up');
+              break;
+          case 'type-down':
+              data = (data.sort(compare_type_up)).reverse();
+              localStorage.setItem('sorting', 'type-down');
+              break;
+          default:
+              data = data;
+              break;
+      }
+
+      data.forEach(({id, createDate, order, type, time}) => {
         new OrderCard(id, createDate, order, type, time).render();
+      });
+    })
+  }
+
+  function compare_id_up( a, b ) {
+    if ( a.id < b.id ){
+      return -1;
+    }
+    if ( a.id > b.id ){
+      return 1;
+    }
+    return 0;
+  }
+
+  function compare_date_up( a, b ) {
+    if ( Date.parse(a.createDate) < Date.parse(b.createDate) ){
+      return -1;
+    }
+    if ( Date.parse(a.createDate) > Date.parse(b.createDate) ){
+      return 1;
+    }
+    return 0;
+  }
+
+  function compare_type_up( a, b ) {
+    if ( a.type < b.type ){
+      return -1;
+    }
+    if ( a.type > b.type ){
+      return 1;
+    }
+    return 0;
+  }
+
+  // обработчик события сортировки (селект)
+
+  sortSelect.addEventListener('change', (elem) => {
+    document.querySelector('.cards').innerHTML = '';
+    cards(elem.target.value);
+  });
+
+  // end блок вывода карточек и сортировки
+
+  // блок добавления карточек
+
+  const postData = async (url, data) => {  
+    let res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: data
     });
-  })
-}
 
-function compare_id_up( a, b ) {
-  if ( a.id < b.id ){
-    return -1;
-  }
-  if ( a.id > b.id ){
-    return 1;
-  }
-  return 0;
-}
+    return await res.json(); 
+  };
 
-function compare_date_up( a, b ) {
-  if ( Date.parse(a.createDate) < Date.parse(b.createDate) ){
-    return -1;
-  }
-  if ( Date.parse(a.createDate) > Date.parse(b.createDate) ){
-    return 1;
-  }
-  return 0;
-}
+  function addForm() {
+    const form = document.querySelector('#add-form');
+    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
-function compare_type_up( a, b ) {
-  if ( a.type < b.type ){
-    return -1;
-  }
-  if ( a.type > b.type ){
-    return 1;
-  }
-  return 0;
-}
+    const message = {
+      loading: 'Загружаем...',
+      success: 'Карточка добавлена',
+      failure: 'Что-то пошло не так :('
+    };
 
-// обработчик события сортировки (селект)
+    bindPostData();
 
-document.querySelector('#sort').addEventListener('change', (elem) => {
-  document.getElementsByClassName('cards d-flex')[0].innerHTML = ''; 
-  cards(elem.target.value);
+    function bindPostData() {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        let statusMsg = document.createElement('div'); //создаем эл-т для вывода статуса
+        statusMsg.classList.add('msg');
+        statusMsg.textContent = message.loading;     
+        form.insertAdjacentElement('beforeend', statusMsg);
+
+        const formData = new FormData(form);
+
+        const json = JSON.stringify(Object.fromEntries(formData.entries()));
+        
+        postData('http://localhost:3000/cards', json)
+        .then(() => {
+          statusMsg.textContent = message.success;
+          document.querySelector('.cards').innerHTML = ''; 
+          cards('start');
+          setTimeout(() => closeModal(addModal), 5000);
+          setTimeout(() => statusMsg.remove(), 5000);
+        }).catch(() => {
+          statusMsg.textContent = message.failure; 
+        }).finally(() => {
+          form.reset();
+        });
+      });
+    }
+  }
+
+  addForm();
+
 });
-
-//
