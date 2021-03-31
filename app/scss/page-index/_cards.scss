@@ -1,6 +1,7 @@
 .cards {
   flex-wrap: wrap;
 
+  
   &__item {
     max-width: 290px;
     width: 100%;
@@ -10,6 +11,10 @@
     background-color: #f6fafb;
     box-shadow: 0px 4px 12px #ebebeb;
     border-radius: 3px;
+    
+    &.selected {
+      opacity: 0.6;
+    }
   }
 
   &__header {
@@ -31,14 +36,12 @@
   }
 
   &__drag {
+    display: inline-block;
     width: 20px;
     height: 18px;
     margin-right: 10px;
     background-image: url(../img/pin.svg);
     background-repeat: no-repeat;
-    border: none;
-    outline: transparent;
-    cursor: pointer;
   }
 
   &__extra {

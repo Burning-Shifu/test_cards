@@ -48,14 +48,13 @@ document.addEventListener('DOMContentLoaded', () => {
         break;
   }
 
-  // блок фильтрации
-
+  
   /** Промис - ожидание прогрузки элемента (для динамичных карточек)
    * Wait for an element before resolving a promise
    * @param {String} querySelector - Selector of element to wait for
    * @param {Integer} timeout - Milliseconds to wait before timing out, or 0 for no timeout              
-  */
-
+   */
+  
   function waitForElement(querySelector, timeout = 0) {
     const startTime = new Date().getTime();
     return new Promise((resolve, reject) => {
@@ -71,9 +70,12 @@ document.addEventListener('DOMContentLoaded', () => {
       }, 100);
     });
   }
+  let cardsList;
 
   waitForElement('.cards__item', 3000).then(function() {
-    const cardsList = document.querySelectorAll('.cards__item');
+
+    // блок фильтрации
+    cardsList = document.querySelectorAll('.cards__item');
 
     // по id
     function filterById(param) {
@@ -170,9 +172,29 @@ document.addEventListener('DOMContentLoaded', () => {
     inputByDate.addEventListener('input', () => {
       filterByTime({"paramFrom": inputFromDate.value, "paramBy": inputByDate.value});
     });
+
+    // end блок фильтрации
+
+    // кнопки на карточках
+    const cardExtra = document.querySelectorAll('.cards__extra');
+
+    cardExtra.forEach((item) => {
+      let cardExtraBtn = item.querySelector('.cards__extra-btn'),
+          cardExtraMenu = item.querySelector('.cards__extra-menu');
+
+        cardExtraBtn.addEventListener('click', () => {
+          if (cardExtraMenu.classList.contains('show')) {
+            cardExtraMenu.classList.remove('show');
+          } else {
+            cardExtraMenu.classList.add('show');
+          }
+      });
+    });
+
+    // end кнопки на карточках
   });
 
-  // end блок фильтрации
+ 
 
   // модальное окно
       
@@ -199,8 +221,6 @@ document.addEventListener('DOMContentLoaded', () => {
       closeModal(addModal);
     }
   });
-
-  // submit
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -238,8 +258,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
       render() {
         const element = document.createElement('article');
+        element.setAttribute('id', this.id);
     
-        // устанавливаем дефолтное значение класса
         if (this.classes.length === 0) {
           element.classList.add('cards__item');
         } else {
@@ -250,7 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="cards__header d-flex">
             <h3 class="cards__title">Карточка <span class="cards__order">${this.order}</span></h3>
             <div class="cards__btns d-flex">
-              <button class="cards__drag" type="button"></button>
+              <span class="cards__drag" type="button"></span>
               <div class="cards__extra">
                 <button class="cards__extra-btn" type="button">
                   <span class="cards__extra-dot"></span>
@@ -287,13 +307,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     getResource('http://localhost:3000/cards').then(data => {
+      if (val === 'start') {
+        val = localStorage.getItem('sorting');
+      }
       switch (val) {
           case 'id-up':
-              data = data.sort(compare_id_up);
+              data = data.sort(compare_first);
               localStorage.setItem('sorting', 'id-up');
               break;
           case 'id-down':
-              data = (data.sort(compare_id_up)).reverse();
+              data = (data.sort(compare_first)).reverse();
               localStorage.setItem('sorting', 'id-down');
               break;
           case 'date-up':
@@ -312,6 +335,8 @@ document.addEventListener('DOMContentLoaded', () => {
               data = (data.sort(compare_type_up)).reverse();
               localStorage.setItem('sorting', 'type-down');
               break;
+          case 'start':
+            
           default:
               data = data;
               break;
@@ -320,17 +345,9 @@ document.addEventListener('DOMContentLoaded', () => {
       data.forEach(({id, createDate, order, type, time}) => {
         new OrderCard(id, createDate, order, type, time).render();
       });
-    })
-  }
 
-  function compare_id_up( a, b ) {
-    if ( a.id < b.id ){
-      return -1;
-    }
-    if ( a.id > b.id ){
-      return 1;
-    }
-    return 0;
+      cardsList = document.querySelectorAll('.cards__item'); // для одновр. работы сортировки и фильтрации
+    })
   }
 
   function compare_date_up( a, b ) {
@@ -362,6 +379,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // end блок вывода карточек и сортировки
 
+
   // блок добавления карточек
 
   const postData = async (url, data) => {  
@@ -378,7 +396,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function addForm() {
     const form = document.querySelector('#add-form');
-    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
     const message = {
       loading: 'Загружаем...',
@@ -392,55 +409,100 @@ document.addEventListener('DOMContentLoaded', () => {
       form.addEventListener('submit', (e) => {
         e.preventDefault();
 
-        let statusMsg = document.createElement('div'); //создаем эл-т для вывода статуса
-        statusMsg.classList.add('msg');
-        statusMsg.textContent = message.loading;     
-        form.insertAdjacentElement('beforeend', statusMsg);
+        getResource('http://localhost:3000/cards').then(data => {
+          let statusMsg = document.createElement('div'); //создаем эл-т для вывода статуса
+          statusMsg.classList.add('msg');
+          statusMsg.textContent = message.loading;     
+          form.insertAdjacentElement('beforeend', statusMsg);
 
-        const formData = new FormData(form);
+          const formData = new FormData(form);
 
-        const json = JSON.stringify(Object.fromEntries(formData.entries()));
-        
-        postData('http://localhost:3000/cards', json)
-        .then(() => {
-          statusMsg.textContent = message.success;
-          document.querySelector('.cards').innerHTML = ''; 
-          cards('start');
-          setTimeout(() => closeModal(addModal), 3000);
-          setTimeout(() => statusMsg.remove(), 3000);
-        }).catch(() => {
-          statusMsg.textContent = message.failure; 
-        }).finally(() => {
-          form.reset();
+          let newCardInfo = Object.fromEntries(formData.entries());
+          let newId;
+          
+          data.sort(compare_first);
+          newId = nextId(data[data.length - 1].id);        
+          newCardInfo.id = newId;
+
+          // передача даты
+          let todayDate = new Date(),
+              month = todayDate.getMonth() + 1;
+
+          if (month < 10) {
+            month = `0${month}`;
+          }
+          
+          let dateToPass = `${todayDate.getDate()}.${month}.${todayDate.getFullYear()}`;
+          newCardInfo.createDate = dateToPass;
+          
+          const json = JSON.stringify(newCardInfo);
+          
+          postData('http://localhost:3000/cards', json)
+          .then(() => {
+            statusMsg.textContent = message.success;
+            document.querySelector('.cards').innerHTML = ''; 
+            cards('start');
+            setTimeout(() => closeModal(addModal), 3000);
+            setTimeout(() => statusMsg.remove(), 3000);
+          }).catch(() => {
+            statusMsg.textContent = message.failure; 
+          }).finally(() => {
+            form.reset();
+          });
         });
       });
+    }
+  }
+    
+  function compare_second (a, b) {
+    if ( a < b ){
+      return -1;
+    }
+    if ( a > b ){
+      return 1;
+    }
+    return 0;
+  }
+
+  function compare_first( a, b ) {
+    if (a.id.charAt(1) !== '' && b.id.charAt(1) !== '') {
+      if ( a.id.charAt(1) < b.id.charAt(1) ) {
+        return -1;
+      }
+      if ( a.id.charAt(1) > b.id.charAt(1) ) {
+        return 1;
+      }
+      if ( a.id.charAt(1) == b.id.charAt(1) ) {
+        return compare_second(a.id.charAt(0),b.id.charAt(0));
+      }
+    } else if (a.id.charAt(1) == '' && b.id.charAt(1) != '') {
+      return -1
+    } else if (a.id.charAt(1) != '' && b.id.charAt(1) == '') {
+      return 1
+    } else if (a.id.charAt(1) == '' && b.id.charAt(1) == '') {
+      return compare_second(a.id.charAt(0),a.id.charAt(0))
+    }
+  }
+
+  function nextId(id) {
+    let alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+    if(id.charAt(1) == ''){
+      if(id.charAt(0) == 'Z'){
+        return 'A1'
+      } else{
+        return alphabet[alphabet.indexOf(id.charAt(0)) + 1]
+      }
+    } else {
+      if(id.charAt(0) == 'Z'){
+        return  'A' + (parseInt(id.charAt(1)) + 1).toString()
+      } else{
+        return alphabet[alphabet.indexOf(id.charAt(0)) + 1] + id.charAt(1)
+      }
     }
   }
 
   addForm();
 
   // end блок добавления карточек
-
-  // кнопки на карточках
-
-  waitForElement('.cards__item', 3000).then(function() {
-    const cardsList = document.querySelectorAll('.cards__item'),
-          // cardExtraBtn = document.querySelectorAll('.cards__extra-btn'),
-          cardExtra = document.querySelectorAll('.cards__extra'),
-          cardExtraMenu = document.querySelectorAll('.cards__extra-menu');
-
-    cardExtra.forEach((item) => {
-      let cardExtraBtn = item.querySelector('.cards__extra-btn'),
-          cardExtraMenu = item.querySelector('.cards__extra-menu');
-
-        cardExtraBtn.addEventListener('click', () => {
-          if (cardExtraMenu.classList.contains('show')) {
-            cardExtraMenu.classList.remove('show');
-          } else {
-            cardExtraMenu.classList.add('show');
-          }
-      });
-    });
-  });
 
 });
