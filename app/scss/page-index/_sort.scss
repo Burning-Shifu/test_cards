@@ -7,11 +7,39 @@
   box-shadow: 0px 4px 12px #e7e7e7;
   border-radius: 3px;
 
+  &__select-wrap {
+    position: relative;
+  }
+
   &__select {
     display: block;
     margin-right: 20px;
     padding: 6px 10px 5px;
+    // font-size: 12px;
+    // line-height: 14px;
     border: 1px solid #E0E5E6;
+    outline: transparent;
+    appearance: none;
+    cursor: pointer;
+
+    &:focus {
+      border: 1px solid var(--purple);
+    }
+    
+    &:focus + .sort__arrow {
+      transform: rotate(-90deg);
+    }
+  }
+
+  &__arrow {
+    position: absolute;
+    top: 12px;
+    right: 30px;
+    width: 10px;
+    height: 6px;
+    background-image: url(../img/down-arrow.svg);
+    background-repeat: no-repeat;
+    transition: transform 0.3s;
   }
 
   &__check-wrapper {

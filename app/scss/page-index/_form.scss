@@ -30,12 +30,26 @@
     padding: 8px 10px;
     border: 1px solid #d9d9d9;
     border-radius: 2px;
+    outline: transparent;
+
+    &:focus {
+      border: 1px solid var(--purple);
+    }
 
     &[type="time"] {
       display: inline-block;
       max-width: 90px;
       background-color: #fafafa;
     }
+  }
+  
+  &__select {
+    appearance: none;
+    background-image: url(../img/down-arrow.svg);
+    background-repeat: no-repeat;
+    background-position: 90% center;
+    background-size: 10px 6px;
+    cursor: pointer;
   }
 
   &__text {

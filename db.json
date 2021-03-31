@@ -39,36 +39,6 @@
       "createDate": "05.02.2021",
       "time": "16.30",
       "fixed": false
-    },
-    {
-      "id": "b1Xy82b",
-      "order": "23",
-      "time": "23:23",
-      "type": "RUEX"
-    },
-    {
-      "id": "4koFqse",
-      "order": "24",
-      "time": "23:24",
-      "type": "RUEX"
-    },
-    {
-      "id": "zvz_Nkx",
-      "order": "07",
-      "time": "07:07",
-      "type": "RUSG"
-    },
-    {
-      "id": "egDf6PM",
-      "order": "56",
-      "time": "03:03",
-      "type": "RUED"
-    },
-    {
-      "id": "Ma0tKyf",
-      "order": "33",
-      "time": "03:33",
-      "type": "RUSG"
     }
   ]
 }

@@ -1,9 +1,15 @@
 .header {
   min-height: 260px;
-  padding: 106px 110px 112px;
+  padding: 20px 120px 23px 110px;
   background: var(--bg-gradient);
 
+  &__inner {
+    justify-content: space-between;
+    align-items: center;
+  }
+
   &__title {
+    margin: 0;
     font-weight: bold;
     font-size: 36px;
     line-height: 42px;

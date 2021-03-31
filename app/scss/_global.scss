@@ -1,6 +1,13 @@
 :root {
   --bg-gradient: linear-gradient(267.21deg, #900793 0.16%, rgba(134, 4, 137, 0.785707) 0.16%, rgba(159, 12, 162, 0.762269) 43.22%, rgba(5, 1, 190, 0.734375) 98.12%, rgba(0, 28, 126, 0.619792) 100.15%, rgba(6, 77, 142, 0.447917) 102.03%, rgba(1, 0, 60, 0) 102.73%);
   --text-color: #2b2839;
+  --purple: #660668;
+  --light-purple: rgba(237,232,245,0.5);
+}
+
+html,
+body {
+  height: 100%;
 }
 
 html {
@@ -14,11 +21,17 @@ html {
 }
 
 body {
+  display: flex;
+  flex-direction: column;
   font-family: Roboto, sans-serif;
   font-size: 14px;
   line-height: 1.2em;
   color: var(--text-color);
   background-color: #e5e5e5;
+}
+
+.wrapper {
+  flex: 1 0 auto;
 }
 
 a {
@@ -48,7 +61,20 @@ a {
   background-color: #fff;
   border: 1px solid #e0e5e6;
   border-radius: 3px;
+  outline: transparent;
   cursor: pointer;
+
+  &:hover {
+    background-color: var(--light-purple);
+  }
+
+  &:focus {
+    box-shadow: 0 0 2px 2px var(--purple);
+  }
+
+  &:active {
+    box-shadow: inset 0 0 2px 2px #fff;
+  }
 }
 
 .msg {

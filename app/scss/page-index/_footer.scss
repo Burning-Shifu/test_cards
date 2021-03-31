@@ -1,4 +1,5 @@
 .footer {
-  min-height: 96px;
+  flex-shrink: 0;
+  height: 100px;
   background: var(--bg-gradient);
 }

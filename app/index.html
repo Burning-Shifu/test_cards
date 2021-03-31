@@ -10,81 +10,88 @@
 </head>
 
 <body>
+  <div class="wrapper">
 
-  <header class="header">
-    <div class="container">
-      <h1 class="header__title">Тестовое задание</h1>
-    </div>
-  </header>
-
-  <main class="main">
-    <div class="container">
-      <div class="main__inner d-flex">
-
-        <div class="filters form">
-
-          <h2 class="form__title filters__title">Фильтры</h2>
-
-          <div class="form__inner filters__inner">
-            <label for="filter-id" class="form__label">ID</label>
-            <input type="text" class="form__input" placeholder="Введите значение" id="filter-id" name="id">
-  
-            <label for="filter-num" class="form__label">Номер накладной</label>
-            <input type="number" class="form__input" placeholder="Введите значение" id="filter-num" name="num">
-  
-            <label for="filter-from-date" class="form__label">Время прибытия на выгрузку</label>
-            <span class="form__text">с</span>
-            <input type="time" class="form__input" id="filter-from-date" name="from-date">
-  
-            <span class="form__text">по</span>
-            <input type="time" class="form__input" id="filter-by-date" name="to-date">
-  
-            <span class="form__label">Тип заказа</span>
-            <select class="form__input" id="filter-type" name="type">
-              <option value="all">Все типы</option>
-              <option value="RUED">RUED</option>
-              <option value="RUEX">RUEX</option>
-              <option value="RUSG">RUSG</option>
-            </select>
-          </div>
-
+    <header class="header">
+      <div class="container">
+        <div class="header__inner d-flex">
+          <h1 class="header__title">Тестовое задание</h1>
+          <img class="header__img" src="img/header-img.png" alt="laptop">
         </div>
+      </div>
+    </header>
 
-        <div class="main__block">
+    <main class="main">
+      <div class="container">
+        <div class="main__inner d-flex">
 
-          <div class="sort d-flex">
+          <div class="filters form">
 
-            <select class="sort__select" id="sort" name="sort">
-              <option value="default" disabled selected>Сортировка</option>
-              <option value="id-up">По возрастанию ID</option>
-              <option value="id-down">По убыванию ID</option>
-              <option value="date-up">По дате создания: возрастание</option>
-              <option value="date-down">По дате создания: убывание</option>
-              <option value="type-up">По типу заказа: возрастание</option>
-              <option value="type-down">По типу заказа: убывание</option>
-            </select>
+            <h2 class="form__title filters__title">Фильтры</h2>
 
-            <div class="sort__check-wrapper">
-              <input class="sort__check-input" type="checkbox" name="drag" >
-              <span class="sort__check"></span>
-              <label for="drag" class="sort__label">Включить перетаскивание</label>
+            <div class="form__inner filters__inner">
+              <label for="filter-id" class="form__label">ID</label>
+              <input type="text" class="form__input" placeholder="Введите значение" id="filter-id" name="id">
+
+              <label for="filter-num" class="form__label">Номер накладной</label>
+              <input type="number" class="form__input" placeholder="Введите значение" id="filter-num" name="num">
+
+              <label for="filter-from-date" class="form__label">Время прибытия на выгрузку</label>
+              <span class="form__text">с</span>
+              <input type="time" class="form__input" id="filter-from-date" name="from-date">
+
+              <span class="form__text">по</span>
+              <input type="time" class="form__input" id="filter-by-date" name="to-date">
+
+              <span class="form__label">Тип заказа</span>
+              <select class="form__input form__select" id="filter-type" name="type">
+                <option value="all">Все типы</option>
+                <option value="RUED">RUED</option>
+                <option value="RUEX">RUEX</option>
+                <option value="RUSG">RUSG</option>
+              </select>
             </div>
 
-            <button class="btn sort__add" type="button">Добавить</button>
+          </div>
+
+          <div class="main__block">
+
+            <div class="sort d-flex">
+
+              <div class="sort__select-wrap">
+                <select class="sort__select" id="sort" name="sort">
+                  <option value="default" disabled selected>Сортировка</option>
+                  <option value="id-up">По возрастанию ID</option>
+                  <option value="id-down">По убыванию ID</option>
+                  <option value="date-up">По дате создания: возрастание</option>
+                  <option value="date-down">По дате создания: убывание</option>
+                  <option value="type-up">По типу заказа: возрастание</option>
+                  <option value="type-down">По типу заказа: убывание</option>
+                </select>
+                <span class="sort__arrow"></span>
+              </div>
+
+              <div class="sort__check-wrapper">
+                <input class="sort__check-input" type="checkbox" name="drag" >
+                <span class="sort__check"></span>
+                <label for="drag" class="sort__label">Включить перетаскивание</label>
+              </div>
+
+              <button class="btn sort__add" type="button">Добавить</button>
+
+            </div>
+
+            <div class="cards d-flex">
+            </div>
 
           </div>
 
-          <div class="cards d-flex">
-          </div>
 
         </div>
-
-
       </div>
-    </div>
-  </main>
-
-
+    </main>
+  
+  </div>
 
   <footer class="footer"></footer>
 
@@ -107,7 +114,7 @@
             <input type="time" class="form__input" id="addCard-time" name="time" required>
     
             <span class="form__label">Тип заказа</span>
-            <select class="form__input" id="addCard-type" name="type" required>
+            <select class="form__input form__select" id="addCard-type" name="type" required>
               <option value="" disabled selected>Выберите</option>
               <option value="RUED">RUED</option>
               <option value="RUEX">RUEX</option>
@@ -124,7 +131,6 @@
   </div>
 
 
-  <script src="js/libs.min.js"></script>
   <script src="js/main.js"></script>
 
 </body>

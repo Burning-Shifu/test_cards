@@ -2,7 +2,18 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  const sortSelect = document.querySelector('#sort');
+  const sortSelect = document.querySelector('#sort'),
+        btnModal = document.querySelector('.sort__add'),
+        btnClose = document.querySelector('.modal__close'),
+        addModal = document.querySelector('.modal'),
+        body = document.querySelector('body'),
+        form = document.querySelector('.form'),
+        inputId = document.querySelector("#filter-id"),
+        inputOrder = document.querySelector("#filter-num"),
+        inputFromDate = document.querySelector('#filter-from-date'),
+        inputByDate = document.querySelector('#filter-by-date'),
+        inputType = document.querySelector('#filter-type');
+  let scrollWidth = window.innerWidth - document.documentElement.clientWidth;
 
   // проверка в LS на сортировку
 
@@ -61,13 +72,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  waitForElement(".cards__item", 3000).then(function() {
-    const cardsList = document.querySelectorAll('.cards__item'),
-          inputId = document.querySelector("#filter-id"),
-          inputOrder = document.querySelector("#filter-num"),
-          inputFromDate = document.querySelector('#filter-from-date'),
-          inputByDate = document.querySelector('#filter-by-date'),
-          inputType = document.querySelector('#filter-type');
+  waitForElement('.cards__item', 3000).then(function() {
+    const cardsList = document.querySelectorAll('.cards__item');
 
     // по id
     function filterById(param) {
@@ -169,12 +175,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // end блок фильтрации
 
   // модальное окно
-  const btnModal = document.querySelector('.sort__add'),
-    btnClose = document.querySelector('.modal__close'),
-    addModal = document.querySelector('.modal'),
-    body = document.querySelector('body'),
-    form = document.querySelector('.form');
-  let scrollWidth = window.innerWidth - document.documentElement.clientWidth;
       
   function openModal(modal) {
     modal.classList.remove('hide');
@@ -182,15 +182,15 @@ document.addEventListener('DOMContentLoaded', () => {
     body.style.overflow = 'hidden';
     body.style.paddingRight = scrollWidth + 'px';
   }
-
-  btnModal.addEventListener('click', () => openModal(addModal));
-
+  
   function closeModal(modal) {
     modal.classList.remove('show');
     modal.classList.add('hide');
     body.style.overflow = 'auto';
     body.style.paddingRight = 0 + 'px';
   }
+
+  btnModal.addEventListener('click', () => openModal(addModal));
 
   btnClose.addEventListener('click', () => closeModal(addModal));
 
@@ -209,9 +209,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // end модальные окна
-
-
-
 
   // блок get карточек и сортировки
 
@@ -235,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
         this.order = order;
         this.type = type;
         this.time = time;
-        this.classes = classes;  // важно помнить, что это массив, даже если он пустой
+        this.classes = classes; 
         this.parent = document.querySelector(".cards");
       }
     
@@ -246,15 +243,36 @@ document.addEventListener('DOMContentLoaded', () => {
         if (this.classes.length === 0) {
           element.classList.add('cards__item');
         } else {
-          this.classes.forEach(className => element.classList.add(className)); // добавляем диву все классы из массива
+          this.classes.forEach(className => element.classList.add(className));
         }
     
         element.innerHTML = `
           <div class="cards__header d-flex">
             <h3 class="cards__title">Карточка <span class="cards__order">${this.order}</span></h3>
-            <button class="cards__extra" type="button">
-              <span class="cards__extra-dot"></span>
-            </button>
+            <div class="cards__btns d-flex">
+              <button class="cards__drag" type="button"></button>
+              <div class="cards__extra">
+                <button class="cards__extra-btn" type="button">
+                  <span class="cards__extra-dot"></span>
+                </button>
+                <div class="cards__extra-menu">
+                  <ul class="cards__extra-list">
+                    <li class="cards__extra-item">
+                      <button class="cards__extra-menu-btn" type="button">
+                        <span class="cards__extra-pic cards__extra-pic--pen"></span>
+                        Редактировать
+                      </button>
+                    </li>
+                    <li class="cards__extra-item">
+                      <button class="cards__extra-menu-btn" type="button">
+                        <span class="cards__extra-pic cards__extra-pic--cross"></span>
+                        Удалить
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="cards__content">
             <p class="cards__id">${this.id}</p>
@@ -388,8 +406,8 @@ document.addEventListener('DOMContentLoaded', () => {
           statusMsg.textContent = message.success;
           document.querySelector('.cards').innerHTML = ''; 
           cards('start');
-          setTimeout(() => closeModal(addModal), 5000);
-          setTimeout(() => statusMsg.remove(), 5000);
+          setTimeout(() => closeModal(addModal), 3000);
+          setTimeout(() => statusMsg.remove(), 3000);
         }).catch(() => {
           statusMsg.textContent = message.failure; 
         }).finally(() => {
@@ -400,5 +418,29 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   addForm();
+
+  // end блок добавления карточек
+
+  // кнопки на карточках
+
+  waitForElement('.cards__item', 3000).then(function() {
+    const cardsList = document.querySelectorAll('.cards__item'),
+          // cardExtraBtn = document.querySelectorAll('.cards__extra-btn'),
+          cardExtra = document.querySelectorAll('.cards__extra'),
+          cardExtraMenu = document.querySelectorAll('.cards__extra-menu');
+
+    cardExtra.forEach((item) => {
+      let cardExtraBtn = item.querySelector('.cards__extra-btn'),
+          cardExtraMenu = item.querySelector('.cards__extra-menu');
+
+        cardExtraBtn.addEventListener('click', () => {
+          if (cardExtraMenu.classList.contains('show')) {
+            cardExtraMenu.classList.remove('show');
+          } else {
+            cardExtraMenu.classList.add('show');
+          }
+      });
+    });
+  });
 
 });
