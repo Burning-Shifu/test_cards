@@ -70,6 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }, 100);
     });
   }
+  
   let cardsList;
 
   waitForElement('.cards__item', 3000).then(function() {
@@ -175,23 +176,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // end блок фильтрации
 
-    // кнопки на карточках
-    const cardExtra = document.querySelectorAll('.cards__extra');
-
-    cardExtra.forEach((item) => {
-      let cardExtraBtn = item.querySelector('.cards__extra-btn'),
-          cardExtraMenu = item.querySelector('.cards__extra-menu');
-
-        cardExtraBtn.addEventListener('click', () => {
-          if (cardExtraMenu.classList.contains('show')) {
-            cardExtraMenu.classList.remove('show');
-          } else {
-            cardExtraMenu.classList.add('show');
-          }
-      });
-    });
-
-    // end кнопки на карточках
   });
 
  
@@ -345,6 +329,24 @@ document.addEventListener('DOMContentLoaded', () => {
       data.forEach(({id, createDate, order, type, time}) => {
         new OrderCard(id, createDate, order, type, time).render();
       });
+
+      // кнопки на карточках
+      const cardExtra = document.querySelectorAll('.cards__extra');
+
+      cardExtra.forEach((item) => {
+        let cardExtraBtn = item.querySelector('.cards__extra-btn'),
+            cardExtraMenu = item.querySelector('.cards__extra-menu');
+
+        cardExtraBtn.addEventListener('click', () => {
+          if (cardExtraMenu.classList.contains('show')) {
+            cardExtraMenu.classList.remove('show');
+          } else {
+            cardExtraMenu.classList.add('show');
+          }
+        });
+      });
+
+      // end кнопки на карточках
 
       cardsList = document.querySelectorAll('.cards__item'); // для одновр. работы сортировки и фильтрации
     })
@@ -505,4 +507,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // end блок добавления карточек
 
+  
 });
